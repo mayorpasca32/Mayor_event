@@ -21,14 +21,6 @@ pipeline {
                   curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
                   sudo apt-get install -y nodejs
                 fi
-
-                # Install yarn if missing
-                if ! command -v yarn >/dev/null 2>&1; then
-                  sudo npm install -g yarn
-                fi
-
-                yarn install
-                '''
             }
         }
 
