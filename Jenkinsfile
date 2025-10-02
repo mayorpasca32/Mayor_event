@@ -37,7 +37,9 @@ pipeline {
                 sh '''
                 sudo rm -rf ${APP_DIR}
                 sudo mkdir -p ${APP_DIR}
+                sh """
                 sudo cp -r .next out public package.json ${APP_DIR} || true
+                """
                 sudo cp -r next.config.js ${APP_DIR} || true
                 sudo chown -R www-data:www-data ${APP_DIR}
                 '''
