@@ -21,6 +21,14 @@ pipeline {
                   curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
                   sudo apt-get install -y nodejs
                 fi
+
+                # Install Yarn if not installed
+                if ! command -v yarn >/dev/null 2>&1; then
+                  sudo npm install -g yarn
+                fi
+
+                yarn install
+                '''
             }
         }
 
@@ -35,13 +43,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                sudo rm -rf ${APP_DIR}
-                sudo mkdir -p ${APP_DIR}
-                sh """
-                sudo cp -r .next out public package.json ${APP_DIR} || true
-                """
-                sudo cp -r next.config.js ${APP_DIR} || true
-                sudo chown -R www-data:www-data ${APP_DIR}
+                sudo rm -rf $APP_DIR
+                sudo mkdir -p $APP_DIR
+
+                # Copy build artifacts
+                sudo cp -r .next out public package.json $APP_DIR || true
+                sudo cp -r next.config.js $APP_DIR || true
+
+                # Set permissions
+                sudo chown -R www-data:www-data $APP_DIR
                 '''
             }
         }
